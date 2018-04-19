@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "53590133531",
+    "firebase_url": "https://txt-me-9d4ef.firebaseio.com",
+    "project_id": "txt-me-9d4ef",
+    "storage_bucket": "txt-me-9d4ef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53590133531:android:5d73dd7e2804a6cb",
+        "android_client_info": {
+          "package_name": "com.monsordi.txtme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53590133531-oj6mkudan3s91kthg74im8sim653ert8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7IRD31H2_uj2xvKUNlbAvQaGw1rmW5Zg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
