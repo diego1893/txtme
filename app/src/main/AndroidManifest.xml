@@ -41,18 +41,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.monsordi.txtme.SignInActivity" />
         </activity>
-        <activity android:name=".ChatActivity"
+        <activity
+            android:name=".ChatActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize"
-            android:launchMode="singleTop"
-            >
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Detalles"></activity>
     </application>
 
 </manifest>
