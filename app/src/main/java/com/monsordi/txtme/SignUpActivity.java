@@ -1,6 +1,5 @@
 package com.monsordi.txtme;
 
-import android.*;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -23,13 +22,16 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.monsordi.txtme.dialog.DialogTxtMe;
 import com.monsordi.txtme.firebaseauth.EmailPassword;
@@ -38,8 +40,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener,
-        EmailPassword.EmailPasswordTasks, OnCompleteListener<Void>,
-        DialogTxtMe.DialogTxtMeTasks {
+        EmailPassword.EmailPasswordTasks, DialogTxtMe.DialogTxtMeTasks, OnSuccessListener<UploadTask.TaskSnapshot>, OnFailureListener, OnCompleteListener<Void> {
 
     private static final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 100;
     private static final int REQUEST_IMAGE = 200;
@@ -62,13 +63,18 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     @BindView(R.id.signUp_toolbar)
     Toolbar toolbar;
 
-    private String displayName;
+    private String name;
+    private String userName = "panchito";
     private String email;
+    private String phone = "5543629361";
     private Uri pictureUri;
+    private String pictureString;
     private String password;
     private String confirmPassword;
 
     private StorageReference storageReference;
+    private DatabaseReference databaseReference;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,13 +93,13 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         switch (v.getId()) {
             //Reads all fields
             case R.id.signUp_signUpButton:
-                displayName = nameEditText.getText().toString();
+                name = nameEditText.getText().toString();
                 email = emailEditText.getText().toString();
                 password = passwordEditText.getText().toString();
                 confirmPassword = confirmPasswordEditText.getText().toString();
 
                 //If no field is empty, the user is warned to check their information
-                if (!TextUtils.isEmpty(displayName) && pictureUri != null && !TextUtils.isEmpty(email)
+                if (!TextUtils.isEmpty(name) && pictureUri != null && !TextUtils.isEmpty(email)
                         && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(confirmPassword)) {
                     DialogTxtMe DialogTxtMe = new DialogTxtMe(this, this);
                     DialogTxtMe.showGoTravelDialog(getString(R.string.continue_sign_up));
@@ -204,6 +210,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void showProgressDialog(boolean isShown) {
         container.setVisibility(isShown ? View.GONE : View.VISIBLE);
+        toolbar.setVisibility(isShown ? View.GONE : View.VISIBLE);
         progressBar.setVisibility(isShown ? View.VISIBLE : View.GONE);
     }
 
@@ -212,10 +219,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void handleAuthTask(FirebaseUser user) {
         if (user != null) {
-            storageReference = FirebaseStorage.getInstance().getReference().child(user.getEmail());
-            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                    .setDisplayName(displayName).build();
-            user.updateProfile(profileUpdates).addOnCompleteListener(this);
+            this.user = user;
+            storageReference = FirebaseStorage.getInstance().getReference().child("users").child(user.getUid());
+            UploadTask uploadTask = storageReference.putFile(pictureUri);
+            uploadTask.addOnSuccessListener(this).addOnFailureListener(this);
         }
     }
 
@@ -235,11 +242,29 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     //****************************************************************************************************************
 
-    //The user is taken to the MainActivity when the user's display name is set in their profile
+    //Implementations of uploading task listeners
+
+    @Override
+    public void onFailure(@NonNull Exception e) {
+
+    }
+
+    @Override
+    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+        pictureString = taskSnapshot.getDownloadUrl().toString();
+        User newUser = new User(user.getUid(),name,userName,email,phone,pictureString);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
+        databaseReference.setValue(newUser).addOnCompleteListener(this).addOnFailureListener(this);
+    }
+
+    //****************************************************************************************************************
+
     @Override
     public void onComplete(@NonNull Task<Void> task) {
         startActivity(new Intent(this, ChatActivity.class));
         setResult(Utils.SIGN_UP_COMPLETED_RESULT);
         finish();
     }
+
+
 }

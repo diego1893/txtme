@@ -52,13 +52,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.75" />
+                app:layout_constraintGuide_percent="1" />
 
             <TextView
                 android:id="@+id/row_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
@@ -69,32 +70,18 @@
                 tools:text="Diego Montero" />
 
             <TextView
-                android:id="@+id/row_hour"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:textAlignment="textEnd"
-                app:layout_constraintBottom_toBottomOf="@+id/row_name"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideline3"
-                app:layout_constraintTop_toTopOf="@+id/row_name"
-                tools:text="12:00 PM" />
-
-            <TextView
-                android:id="@+id/row_message"
+                android:id="@+id/row_email"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
                 android:gravity="center_vertical"
+                android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="@+id/guideline2"
-                tools:text="Hi! I'm so glad to meet you" />
+                tools:text="diego.ams.1893@gmail.com" />
 
             <View
                 android:layout_width="0dp"

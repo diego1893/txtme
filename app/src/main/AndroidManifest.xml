@@ -16,7 +16,9 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateAlwaysHidden">
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:parentActivityName="com.monsordi.txtme.ChatActivity"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.monsordi.txtme.ChatActivity" />
@@ -32,7 +34,9 @@
             android:label="@string/sign_up"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateVisible|adjustNothing">
+            android:windowSoftInputMode="stateVisible|adjustNothing"
+            android:parentActivityName=".SignInActivity"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.monsordi.txtme.SignInActivity" />
