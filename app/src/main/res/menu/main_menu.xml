@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="none">
+        <item android:id="@+id/nombre"
+            android:title=""/>
+        <item android:id="@+id/correo"
+            android:title=""/>
+        <item android:id="@+id/telefono"
+            android:title=""/>
 
-    <item android:id="@+id/menu_sign_out"
-        android:icon ="@drawable/ic_exit_to_app_white_24dp"
-        app:showAsAction="always"
-        android:title="@string/sign_out"
-        />
+    </group>
+
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_seccion1"
+            android:title="Editar"/>
+        <item
+            android:id="@+id/menu_seccion2"
+            android:title="Ver amigos"/>
+        <item
+            android:id="@+id/menu_seccion3"
+            android:title="Cerrar sesión"/>
+
+    </group>
+
 </menu>

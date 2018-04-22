@@ -26,6 +26,14 @@ public class User implements Serializable {
         this.imageString = imageString;
     }
 
+    public User(String uId, String name, String userName, String email, String phone) {
+        this.uId = uId;
+        this.name = name;
+        this.userName = userName;
+        this.email = email;
+        this.phone = phone;
+    }
+
     public String getuId() {
         return uId;
     }

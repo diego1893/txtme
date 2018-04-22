@@ -6,13 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +19,8 @@ public class MainActivity extends AppCompatActivity implements UserHolder.OnItem
 
     @BindView(R.id.main_toolbar)
     Toolbar toolbar;
+
+
     @BindView(R.id.main_recyclerview)
     RecyclerView recyclerView;
 
@@ -33,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements UserHolder.OnItem
 
     private DatabaseReference databaseReference;
     private ChildEventListener childEventListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +40,17 @@ public class MainActivity extends AppCompatActivity implements UserHolder.OnItem
         getSupportActionBar().setTitle(getString(R.string.participants));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         getFirebaseDatabase();
+
     }
+
+
+
 
     private void getFirebaseDatabase() {
         databaseReference = FirebaseDatabase.getInstance().getReference().child("users");
