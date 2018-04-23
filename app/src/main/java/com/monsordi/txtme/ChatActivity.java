@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -12,8 +13,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -29,10 +35,16 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import com.monsordi.txtme.dialog.DialogTxtMe;
 import com.monsordi.txtme.firebaseauth.EmailPassword;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ChatActivity extends AppCompatActivity implements DialogTxtMe.DialogTxtMeTasks, NavigationView.OnNavigationItemSelectedListener{
+public class ChatActivity extends AppCompatActivity implements DialogTxtMe.DialogTxtMeTasks, NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
+
+    public static final String DATA_REFERENCE = "chat2";
 
     private static final int CONTACTS_LIST = 100;
     private static final int SETTINGS = 101;
@@ -51,6 +63,18 @@ public class ChatActivity extends AppCompatActivity implements DialogTxtMe.Dialo
     @BindView(R.id.navview)
     NavigationView navView;
     CircularImageView image;
+
+    EditText chatMessage;
+    FloatingActionButton chatButtonSend;
+    ListView listMessages;
+
+    //Elements Adapter
+    List<Message> arrayMessages;
+    ArrayAdapter<Message> messageAdapter;
+
+    private FirebaseAuth mAuth;
+
+    private String nameDisplay;
 
 
     @Override
@@ -77,7 +101,21 @@ public class ChatActivity extends AppCompatActivity implements DialogTxtMe.Dialo
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        chatMessage = findViewById(R.id.chat_message);
+        chatButtonSend = findViewById(R.id.chat_send_button);
+        listMessages = findViewById(R.id.chat_listview);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        arrayMessages = new ArrayList<>();
+        messageAdapter = new MessageAdapter(this, R.layout.row_my_message, arrayMessages, mAuth.getCurrentUser().getUid());
+
+        listMessages.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+        listMessages.setStackFromBottom(true);
+        listMessages.setAdapter(messageAdapter);
+
         navView.setNavigationItemSelectedListener(this);
+        chatButtonSend.setOnClickListener(this);
         image =  navView.getHeaderView(0).findViewById(R.id.image);
         /*Checks if there is a current active user. If yes, a welcome greeting appears on the
          screen. On the contrary, the user is taken to the SignInActivity*/
@@ -91,6 +129,31 @@ public class ChatActivity extends AppCompatActivity implements DialogTxtMe.Dialo
             getFirebaseDatabase();
         }
 
+        //Get Messages
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference(DATA_REFERENCE);
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> receivedMessages = dataSnapshot.getChildren();
+
+                arrayMessages.clear();
+                while (receivedMessages.iterator().hasNext()) {
+                    DataSnapshot data = receivedMessages.iterator().next();
+                    Message message1 = data.getValue(Message.class);
+                    Log.i("Mensaje",message1.getMessage());
+                    arrayMessages.add(message1);
+                }
+
+                messageAdapter.notifyDataSetChanged();
+                //Toast.makeText(MainActivity.this, mensaje1.getMensaje(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
     }
@@ -118,6 +181,7 @@ public class ChatActivity extends AppCompatActivity implements DialogTxtMe.Dialo
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                nameDisplay = dataSnapshot.child("name").getValue().toString();
                 mostrarDatosMenu(R.id.nombre,dataSnapshot.child("name").getValue().toString());
                 mostrarDatosMenu(R.id.correo,dataSnapshot.child("email").getValue().toString());
                 mostrarDatosMenu(R.id.telefono,dataSnapshot.child("phone").getValue().toString());
@@ -182,4 +246,36 @@ public class ChatActivity extends AppCompatActivity implements DialogTxtMe.Dialo
         drawerLayout.closeDrawers();
         return true;
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.chat_send_button:
+                String text = chatMessage.getText().toString();
+                if(!text.isEmpty()) {
+                    Date date = new Date();
+                    String idChild = date.getTime()+"";
+                    String minutes = (date.getMinutes()<10)?"0"+date.getMinutes():""+date.getMinutes();
+                    int hour = (date.getHours()>12)?date.getHours()-12:date.getHours();
+                    String zone = (date.getHours()<12)?"A.M.":"P.M.";
+                    String time = hour+":"+minutes+" "+zone;
+
+                    FirebaseUser currentUser = mAuth.getCurrentUser();
+                    String uid = currentUser.getUid();
+                    //String autor = currentUser.getDisplayName();
+
+                    Message newMessage = new Message(text, uid, time, nameDisplay);
+
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference myRef = database.getReference(DATA_REFERENCE).child(idChild);
+                    myRef.setValue(newMessage);
+                    //Toast.makeText(this, date.getTimezoneOffset(), Toast.LENGTH_SHORT).show();
+
+                    chatMessage.setText("");
+                }
+
+                break;
+        }
+    }
+
 }

@@ -45,12 +45,13 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/chat_recyclerview"
+    <ListView
+        android:id="@+id/chat_listview"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="false"
         android:paddingBottom="8dp"
+        android:divider="@null"
         app:layout_constraintBottom_toTopOf="@+id/message_container"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
