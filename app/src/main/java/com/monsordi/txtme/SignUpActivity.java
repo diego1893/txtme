@@ -48,6 +48,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     CircularImageView profilePicture;
     @BindView(R.id.signUp_nameEditText)
     EditText nameEditText;
+    @BindView(R.id.signUp_userNameEditText)
+    EditText userNameEditText;
+    @BindView(R.id.signUp_phoneEditText)
+    EditText phoneEditText;
     @BindView(R.id.signUp_emailEditText)
     EditText emailEditText;
     @BindView(R.id.signUp_passwordEditText)
@@ -64,17 +68,18 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     Toolbar toolbar;
 
     private String name;
-    private String userName = "panchito";
+    private String userName;
     private String email;
-    private String phone = "5543629361";
+    private String phone;
     private Uri pictureUri;
-    private String pictureString;
+    private String pictureString = "https://app.hyperlingo.com/hyperlingo/img/defaultprofile.png";
     private String password;
     private String confirmPassword;
 
     private StorageReference storageReference;
     private DatabaseReference databaseReference;
     private FirebaseUser user;
+    private int step=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,12 +100,14 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.signUp_signUpButton:
                 name = nameEditText.getText().toString();
                 email = emailEditText.getText().toString();
+                userName = userNameEditText.getText().toString();
+                phone = phoneEditText.getText().toString();
                 password = passwordEditText.getText().toString();
                 confirmPassword = confirmPasswordEditText.getText().toString();
 
                 //If no field is empty, the user is warned to check their information
-                if (!TextUtils.isEmpty(name) && pictureUri != null && !TextUtils.isEmpty(email)
-                        && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(confirmPassword)) {
+                if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(userName) && !TextUtils.isEmpty(phone)
+                        && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(confirmPassword)) {
                     DialogTxtMe DialogTxtMe = new DialogTxtMe(this, this);
                     DialogTxtMe.showGoTravelDialog(getString(R.string.continue_sign_up));
                 } else
@@ -214,15 +221,18 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         progressBar.setVisibility(isShown ? View.VISIBLE : View.GONE);
     }
 
-    /*After signing up process a display name is going to be set to the user depending on what
-    was written in the name. The picture is saved */
+    /**/
     @Override
     public void handleAuthTask(FirebaseUser user) {
         if (user != null) {
             this.user = user;
+            User newUser = new User(user.getUid(),name,userName,email,phone,pictureString);
+            databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
+            databaseReference.setValue(newUser).addOnCompleteListener(this).addOnFailureListener(this);
+            /*
             storageReference = FirebaseStorage.getInstance().getReference().child("users").child(user.getUid());
             UploadTask uploadTask = storageReference.putFile(pictureUri);
-            uploadTask.addOnSuccessListener(this).addOnFailureListener(this);
+            uploadTask.addOnSuccessListener(this).addOnFailureListener(this);*/
         }
     }
 
@@ -252,18 +262,24 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
         pictureString = taskSnapshot.getDownloadUrl().toString();
-        User newUser = new User(user.getUid(),name,userName,email,phone,pictureString);
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
-        databaseReference.setValue(newUser).addOnCompleteListener(this).addOnFailureListener(this);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("imageString");
+        databaseReference.setValue(pictureString).addOnCompleteListener(this).addOnFailureListener(this);
     }
 
     //****************************************************************************************************************
 
     @Override
     public void onComplete(@NonNull Task<Void> task) {
-        startActivity(new Intent(this, ChatActivity.class));
-        setResult(Utils.SIGN_UP_COMPLETED_RESULT);
-        finish();
+        if(step==0) {
+            step++;
+            storageReference = FirebaseStorage.getInstance().getReference().child("users").child(user.getUid());
+            UploadTask uploadTask = storageReference.putFile(pictureUri);
+            uploadTask.addOnSuccessListener(this).addOnFailureListener(this);
+        } else if(step==1){
+            startActivity(new Intent(this, ChatActivity.class));
+            setResult(Utils.SIGN_UP_COMPLETED_RESULT);
+            finish();
+        }
     }
 
 

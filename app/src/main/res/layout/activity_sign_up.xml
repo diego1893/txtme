@@ -90,9 +90,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                app:layout_constraintLeft_toLeftOf="@+id/textInputLayoutName"
-                app:layout_constraintRight_toRightOf="@+id/textInputLayoutName"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutName">
+                app:layout_constraintLeft_toLeftOf="@+id/textInputLayoutPhone"
+                app:layout_constraintRight_toRightOf="@+id/textInputLayoutPhone"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPhone">
 
                 <EditText
                     android:id="@+id/signUp_emailEditText"
@@ -104,6 +104,48 @@
                     android:textColor="@android:color/white" />
 
             </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayoutPhone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintLeft_toLeftOf="@+id/textInputLayoutUserName"
+                app:layout_constraintRight_toRightOf="@+id/textInputLayoutUserName"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutUserName">
+
+                <EditText
+                    android:id="@+id/signUp_phoneEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/white"
+                    android:hint="@string/phone_hint"
+                    android:inputType="phone"
+                    android:textColor="@android:color/white" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayoutUserName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintLeft_toLeftOf="@+id/textInputLayoutName"
+                app:layout_constraintRight_toRightOf="@+id/textInputLayoutName"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutName">
+
+                <EditText
+                    android:id="@+id/signUp_userNameEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/white"
+                    android:hint="@string/user_name"
+                    android:inputType="textPersonName"
+                    android:textColor="@android:color/white" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
 
             <Button
                 android:id="@+id/signUp_signUpButton"

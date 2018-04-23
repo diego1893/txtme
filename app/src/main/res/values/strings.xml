@@ -32,4 +32,6 @@
     <string name="Phone">Phone</string>
     <string name="save">Guardar</string>
     <string name="phone">7444322232</string>
+    <string name="user_name">User name</string>
+    <string name="phone_hint">Phone</string>
 </resources>
