@@ -44,7 +44,7 @@ public class ChatActivity extends AppCompatActivity implements DialogTxtMe.Dialo
     FirebaseAuth mFirebaseAuth;
     FirebaseUser mFirebaseUser;
     DatabaseReference db;
-    @BindView(R.id.appbar)
+    @BindView(R.id.chat_toolbar)
     Toolbar toolbar;
     @BindView(R.id.drawerLayout)
     DrawerLayout drawerLayout;
@@ -72,9 +72,8 @@ public class ChatActivity extends AppCompatActivity implements DialogTxtMe.Dialo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         ButterKnife.bind(this);
-        // setSupportActionBar(toolbar);
-        //getSupportActionBar().setTitle(getString(R.string.chat_activity));
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(getString(R.string.chat_activity));
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

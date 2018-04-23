@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements UserHolder.OnItem
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
