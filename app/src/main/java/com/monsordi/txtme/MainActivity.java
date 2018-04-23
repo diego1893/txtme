@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements UserHolder.OnItem
     @Override
     public void OnItemClick(User user, int position) {
         Intent intent = new Intent(MainActivity.this,Detalles.class);
-        intent.putExtra(getString(R.string.user_display), user);
+        intent.putExtra(getString(R.string.user_display), user.getuId());
         startActivity(intent);
     }
 }
