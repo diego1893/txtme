@@ -88,23 +88,6 @@ public class ChatActivity extends AppCompatActivity implements DialogTxtMe.Dialo
     }
 
     private void getMessages() {
-
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
-        ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getString(R.string.chat_activity));
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        chatMessage = findViewById(R.id.chat_message);
-        chatButtonSend = findViewById(R.id.chat_send_button);
-        listMessages = findViewById(R.id.chat_listview);
-
         mAuth = FirebaseAuth.getInstance();
 
         arrayMessages = new ArrayList<>();
@@ -117,17 +100,6 @@ public class ChatActivity extends AppCompatActivity implements DialogTxtMe.Dialo
         navView.setNavigationItemSelectedListener(this);
         chatButtonSend.setOnClickListener(this);
         image =  navView.getHeaderView(0).findViewById(R.id.image);
-        /*Checks if there is a current active user. If yes, a welcome greeting appears on the
-         screen. On the contrary, the user is taken to the SignInActivity*/
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseUser = mFirebaseAuth.getCurrentUser();
-        if(mFirebaseUser == null){
-            startActivity(new Intent(this,SignInActivity.class));
-            finish();
-        } else {
-            getMessages();
-            getFirebaseDatabase();
-        }
 
         //Get Messages
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -155,7 +127,33 @@ public class ChatActivity extends AppCompatActivity implements DialogTxtMe.Dialo
             }
         });
 
+    }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_chat);
+        ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(getString(R.string.chat_activity));
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        chatMessage = findViewById(R.id.chat_message);
+        chatButtonSend = findViewById(R.id.chat_send_button);
+        listMessages = findViewById(R.id.chat_listview);
+
+        /*Checks if there is a current active user. If yes, a welcome greeting appears on the
+         screen. On the contrary, the user is taken to the SignInActivity*/
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        if(mFirebaseUser == null){
+            startActivity(new Intent(this,SignInActivity.class));
+            finish();
+        } else {
+            getMessages();
+            getFirebaseDatabase();
+        }
     }
 
     @Override

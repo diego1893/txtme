@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseUser;
 import com.monsordi.txtme.firebaseauth.EmailPassword;
 
@@ -33,6 +35,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     TextView signUpTextView;
     @BindView(R.id.login_signInTextView)
     TextView signInTextView;
+    @BindView(R.id.login_background)
+    ImageView loginBackground;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sign_in);
         ButterKnife.bind(this);
 
+        Glide.with(this)
+                .load(R.drawable.waterfall)
+                .into(loginBackground);
         signInButton.setOnClickListener(this);
         signUpTextView.setOnClickListener(this);
     }
