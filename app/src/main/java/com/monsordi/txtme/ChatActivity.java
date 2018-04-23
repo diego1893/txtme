@@ -88,9 +88,6 @@ public class ChatActivity extends AppCompatActivity implements DialogTxtMe.Dialo
             startActivity(new Intent(this,SignInActivity.class));
             finish();
         } else {
-            String welcomeGreeting = new StringBuilder(getString(R.string.welcome)).
-                    append(" ").append(mFirebaseUser.getDisplayName()).toString();
-            Toast.makeText(this, welcomeGreeting, Toast.LENGTH_SHORT).show();
             getMessages();
             getFirebaseDatabase();
         }
@@ -176,14 +173,10 @@ public class ChatActivity extends AppCompatActivity implements DialogTxtMe.Dialo
             case R.id.menu_seccion2:
                 Intent intent = new Intent(ChatActivity.this,MainActivity.class);
                 startActivity(intent);
-                Toast.makeText(ChatActivity.this, "menu_opcion1", Toast.LENGTH_SHORT).show();
-
                 break;
             case R.id.menu_seccion3:
                 DialogTxtMe dialogTxtMe = new DialogTxtMe(this,this);
                 dialogTxtMe.showGoTravelDialog(getString(R.string.sign_out));
-                Toast.makeText(ChatActivity.this, "menu_opcion1", Toast.LENGTH_SHORT).show();
-
                 break;
 
         }
