@@ -34,7 +34,7 @@
             android:parentActivityName=".SignInActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateVisible|adjustNothing">
+            android:windowSoftInputMode="stateVisible">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.monsordi.txtme.SignInActivity" />
@@ -51,8 +51,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".editarActivity"></activity>
-        <activity android:name=".Detalles"></activity>
+        <activity android:name=".editarActivity"
+            android:screenOrientation="portrait"
+            ></activity>
+        <activity android:name=".Detalles"
+            android:screenOrientation="portrait"
+            ></activity>
     </application>
 
 </manifest>
